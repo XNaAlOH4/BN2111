@@ -27,6 +27,3 @@ Something like this:
 1. Using bit operations
 2. Using a function pointer (*signalToHeight), to not bog the Arduino down with if else branches
 3. Clearing graph with memset which should be faster than using a for loop to set each byte
-
-### Using this section as reference for the lcd functions
-createChar can only store up to 8 special characters, nothing else
