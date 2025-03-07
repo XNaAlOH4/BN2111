@@ -55,6 +55,7 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
         for(int i=0; i<=9; i++){             // seed the running total to get a realisitic BPM at startup
           rate[i] = IBI;
         }
+        lcd.clear();
       }
 
       if(firstBeat){                         // if it's the first time we found a beat, if firstBeat == TRUE
