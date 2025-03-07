@@ -17,12 +17,12 @@ So I read thru the Interrupt.ino code afterwards and I found out that they have 
 ## Adding personality to our final project
 1. I feel like adding emojis to the display is a good way to show the personality of our project
 Like this SpO2 emoji
-![SpO2] (imgs/SpO2.jpg "SpO2")
+![SpO2] (imgs/SpO2.png "SpO2")
 2. I way thinking of adding a graph at the very bottom of the screen just cause it might look very cool
 3. The last thing I was thinking of was, since we are making a big cardboard thing, why not make a mechanical button using a spring and 2 aluminium foil contacts
 Something like this:
-![lousySketch] (imgs/lousySketch.jpg "Button Sketch")
-![FirstTry] (imgs/FirstTry.jpg "First button")
+![lousySketch] (imgs/lousySketch.png "Button Sketch")
+![FirstTry] (imgs/FirstTry.png "First button")
 4. **Maybe Maybe** hook up to a Phone and display the Signal graph
 
 ## Speed ups done
