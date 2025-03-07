@@ -18,13 +18,13 @@ So I read thru the Interrupt.ino code afterwards and I found out that they have 
 1. I feel like adding emojis to the display is a good way to show the personality of our project
 Like this SpO2 emoji
 <img src="imgs/SpO2.png" alt="SpO2 img" width="200" />
-![SpO2](./imgs/SpO2.png)
+![SpO2](imgs/SpO2.png)
 2. I way thinking of adding a graph at the very bottom of the screen just cause it might look very cool
 3. The last thing I was thinking of was, since we are making a big cardboard thing, why not make a mechanical button using a spring and 2 aluminium foil contacts
 Something like this:
-<img src="imgs/loustSketch.png" alt="lousySketch" width="200" />
-![lousySketch](./imgs/lousySketch.png)
-![FirstTry](./imgs/FirstTry.png)
+<img src="imgs/lousySketch.png" alt="lousySketch" width="200" />
+![lousySketch](imgs/lousySketch.png)
+![FirstTry](imgs/FirstTry.png)
 4. **Maybe Maybe** hook up to a Phone and display the Signal graph
 
 ## Speed ups done
