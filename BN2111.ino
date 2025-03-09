@@ -42,6 +42,9 @@ void signalToHeight_AtEnd(int sig, byte **cell, char *pixel) {
 }
 
 void setup() {
+  pinMode(blinkPin, OUTPUT);
+  interruptSetup();
+
   lcd.begin(20, 4);
 
   graph_cell = graph;
@@ -83,10 +86,11 @@ void loop() {
     lcd.print("BPM :");
     lcd.print(BPM);
     lcd.write(byte(0));
+    
     // Print SpO2
     lcd.setCursor(0, 1);
-    for(int i = 1; i < 5; i++) lcd.write(byte(i));
-    lcd.print(":");
+    //for(int i = 1; i < 5; i++) lcd.write(byte(i));
+    lcd.print("SpO2 :");
     lcd.print(Signal);
 
     // Draw out the graph
