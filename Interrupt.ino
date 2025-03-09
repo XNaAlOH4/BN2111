@@ -5,7 +5,6 @@ volatile int P =512;                      // used to find peak in pulse wave, se
 volatile int T = 512;                     // used to find trough in pulse wave, seeded
 volatile int thresh = 512;                // used to find instant moment of heart beat, seeded
 volatile int amp = 0;                   // used to hold amplitude of pulse waveform, seeded
-volatile boolean firstBeat = true;        // used to seed rate array so we startup with reasonable BPM
 volatile boolean secondBeat = false;      // used to seed rate array so we startup with reasonable BPM
 
 

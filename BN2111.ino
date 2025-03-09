@@ -10,6 +10,7 @@ volatile int BPM,
          IBI = 600;
 volatile boolean Pulse = false,
          QS = false;
+volatile boolean firstBeat = true;        // used to seed rate array so we startup with reasonable BPM
 
 //Function ptr used to hopefully optimise speed of Arduino
 void (*signalToHeight)(int,byte**);
@@ -60,7 +61,6 @@ void setup() {
   };*/
 
   byte graph_vals[7][8] = {
-                  {0,0,0,0,0,0,0,0x1f},
                   {0,0,0,0,0,0,0x1f,0x1f},
                   {0,0,0,0,0,0x1f,0x1f,0x1f},
                   {0,0,0,0,0x1f,0x1f,0x1f,0x1f},
@@ -95,8 +95,17 @@ void loop() {
 
     // Draw out the graph
     lcd.setCursor(0, 3);
-    for(byte* ptr = graph; ptr != cell+1; ptr++) {
-      lcd.write( ( (*ptr==0)? " ":byte(*ptr) ) );// ternary operator, (condition)? (value if condition is true):(value if condition is false)
+    for(byte* ptr = graph; ptr != graph_cell+1; ptr++) {
+      switch(*ptr) {
+        case 0:
+          lcd.write(" ");
+          break;
+        case 1:
+          lcd.write("_");
+          break;
+        default:
+          lcd.write(byte(*ptr-1));
+      }
     }
     
     QS = false;
