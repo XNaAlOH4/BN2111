@@ -25,7 +25,7 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
   cli();                                      // disable interrupts while we do this
   Signal = analogRead(pulsePin);              // read the Pulse Sensor
                                               
-  signalToHeight(Signal, &graph_cell, &graph_pixel);                           // Store the Signal in my graph
+  signalToHeight(Signal, &graph_cell);                           // Store the Signal in my graph
                                               
   sampleCounter += 2;                         // keep track of the time in mS with this variable
   int N = sampleCounter - lastBeatTime;       // monitor the time since the last beat to avoid noise

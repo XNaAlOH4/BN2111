@@ -12,7 +12,7 @@ volatile boolean Pulse = false,
          QS = false;
 
 //Function ptr used to hopefully optimise speed of Arduino
-void (*signalToHeight)(int,byte**,char*);
+void (*signalToHeight)(int,byte**);
 
 volatile byte graph[20] = {0},
          *graph_cell;
@@ -32,7 +32,7 @@ void signalToHeight_NotEnd(int sig, byte **cell) {
   }
 }
 
-void signalToHeight_AtEnd(int sig, byte **cell, char *pixel) {
+void signalToHeight_AtEnd(int sig, byte **cell) {
   int height = 7-(sig >> 10)*7;
   
   // If we have reached the last cell, shift all data points left and then copy data into the buffer
