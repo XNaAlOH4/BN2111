@@ -3,27 +3,30 @@
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 int pulsePin = 0,
-    blinkPin = 13;
+    blinkPin = 13,
+    tooHighPin = 6;
 
-volatile int BPM,
-         Signal,
-         IBI = 600;
-volatile boolean Pulse = false,
-         QS = false;
+volatile int BPM = 0;
+volatile int Signal;
+volatile int IBI = 600;
+volatile boolean Pulse = false;
+volatile boolean QS = false;
 volatile boolean firstBeat = true;        // used to seed rate array so we startup with reasonable BPM
 
 //Function ptr used to hopefully optimise speed of Arduino
 void (*signalToHeight)(int,byte**);
+void signalToHeight_AtEnd(int sig, byte **cell);
+void signalToHeight_NotEnd(int sig, byte **cell);
 
-volatile byte graph[20] = {0},
-         *graph_cell;
+const byte graph[20] = {0};
+volatile byte *graph_cell;
 
 void signalToHeight_NotEnd(int sig, byte **cell) {
   // The height of each cell is only 8, so we need to change a range of [0,1024] to [0,7] so divide by 1024 and multiply by 7,
   // To do it faster, 2^10 = 1024, so shift down by 10 or >> 10;
   int height = 7-(sig >> 10)*7;
 
-  (*cell) = height;
+  (**cell) = (byte)height;
 
   (*cell)++;
   if(*cell == graph+19) {
@@ -39,16 +42,18 @@ void signalToHeight_AtEnd(int sig, byte **cell) {
   // If we have reached the last cell, shift all data points left and then copy data into the buffer
   memmove(*cell, (*cell)+1, sizeof(byte)*7);
 
-  (*cell) = height;
+  (**cell) = height;
 }
 
 void setup() {
+  Serial.begin(9600);
   pinMode(blinkPin, OUTPUT);
-  interruptSetup();
+  pinMode(tooHighPIN, OUTPUT);
+  digitalWrite(tooHighPin, LOW);
+  graph_cell = graph;
+  signalToHeight = signalToHeight_NotEnd;
 
   lcd.begin(20, 4);
-
-  graph_cell = graph;
 
   // These variables won't be used apart from now I think, so don't waste Arduino memory storing them
   byte heart[8] = {0b00000, 0b01010, 0b11111, 0b11111, 0b11111, 0b01110, 0b00100, 0b00000};
@@ -94,7 +99,7 @@ void loop() {
     lcd.print(Signal);
 
     // Draw out the graph
-    lcd.setCursor(0, 3);
+    /*lcd.setCursor(0, 3);
     for(byte* ptr = graph; ptr != graph_cell+1; ptr++) {
       switch(*ptr) {
         case 0:
@@ -106,7 +111,7 @@ void loop() {
         default:
           lcd.write(byte(*ptr-1));
       }
-    }
+    }*/
     
     QS = false;
   }
