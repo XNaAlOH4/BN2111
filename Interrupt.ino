@@ -6,7 +6,7 @@ volatile int T = 512;                     // used to find trough in pulse wave, 
 volatile int thresh = 530;                // used to find instant moment of heart beat, seeded
 volatile int amp = 0;                   // used to hold amplitude of pulse waveform, seeded
 volatile boolean secondBeat = false;      // used to seed rate array so we startup with reasonable BPM
-
+int captured = 0;
 
 void interruptSetup(){  // CHECK OUT THE Timer_Interrupt_Notes TAB FOR MORE ON INTERRUPTS 
   // Initializes Timer2 to throw an interrupt every 2mS.
@@ -38,6 +38,10 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
 
   if(Signal > thresh && Signal > P){          // thresh condition helps avoid noise
     P = Signal;                             // P is the peak
+    if(captured == 0) {
+      graph_cell = 7;
+    }
+    captured = (captured+1) % 10;
   }                                        // keep track of highest point in pulse wave
 
   //  NOW IT'S TIME TO LOOK FOR THE HEART BEAT
@@ -73,6 +77,7 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
         runningTotal += rate[i];              // add up the 9 oldest IBI values
       }
 
+      if(IBI < 100) IBI = 100;
       rate[9] = IBI;                          // add the latest IBI to the rate array
       runningTotal += rate[9];                // add the latest IBI to runningTotal
       runningTotal /= 10;                     // average the last 10 IBI values
@@ -89,15 +94,11 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
     thresh = amp/2 + T;                    // set thresh at 50% of the amplitude
     P = thresh;                            // reset these for next time
     T = thresh;
-  }else if(Pulse == true) {
-    Serial.println("LED on but pulse is still high\n");
   }
 
   if(BPM > 100 && firstBeat == false) {
     cli();
     digitalWrite(tooHighPin, HIGH);
-    delay(5000);
-    // Buzz the buzzer
   }
 
   if (N > 2500){                           // if 2.5 seconds go by without a beat
@@ -107,7 +108,13 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
     lastBeatTime = sampleCounter;          // bring the lastBeatTime up to date
     firstBeat = true;                      // set these to avoid noise
     secondBeat = false;                    // when we get the heartbeat back
+    Pulse = false;
     BPM = 0;
+    for(int i = 0; i < 8; i++) {
+      rate[i] = 600;
+    }
+    IBI = 600;
+    digitalWrite(tooHighPin, LOW);
   }
 
   sei();                                   // enable interrupts when youre done!
