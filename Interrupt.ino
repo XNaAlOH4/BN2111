@@ -6,6 +6,7 @@ volatile int T = 512;                     // used to find trough in pulse wave, 
 volatile int thresh = 530;                // used to find instant moment of heart beat, seeded
 volatile int amp = 0;                   // used to hold amplitude of pulse waveform, seeded
 volatile boolean secondBeat = false;      // used to seed rate array so we startup with reasonable BPM
+int captured = 0;
 
 
 void interruptSetup(){  // CHECK OUT THE Timer_Interrupt_Notes TAB FOR MORE ON INTERRUPTS 
@@ -38,6 +39,10 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
 
   if(Signal > thresh && Signal > P){          // thresh condition helps avoid noise
     P = Signal;                             // P is the peak
+    if(captured == 0) {
+      graph_cell = 7;
+    }
+    captured = (captured+1) % 10;
   }                                        // keep track of highest point in pulse wave
 
   //  NOW IT'S TIME TO LOOK FOR THE HEART BEAT
@@ -96,8 +101,6 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
   if(BPM > 100 && firstBeat == false) {
     cli();
     digitalWrite(tooHighPin, HIGH);
-    delay(5000);
-    // Buzz the buzzer
   }
 
   if (N > 2500){                           // if 2.5 seconds go by without a beat
@@ -107,7 +110,10 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
     lastBeatTime = sampleCounter;          // bring the lastBeatTime up to date
     firstBeat = true;                      // set these to avoid noise
     secondBeat = false;                    // when we get the heartbeat back
+    Pulse = false;
     BPM = 0;
+    IBI = 600;
+    digitalWrite(tooHighPin, LOW);
   }
 
   sei();                                   // enable interrupts when youre done!
