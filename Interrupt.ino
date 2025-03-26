@@ -47,7 +47,7 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
   //  NOW IT'S TIME TO LOOK FOR THE HEART BEAT
   // signal surges up in value every time there is a pulse
   if (N > 250){                                   // avoid high frequency noise
-    if ( (Signal > thresh) && (Pulse == false) && (N > (IBI/5)*3) ){
+    if ( (Signal > thresh) && (Pulse == false) && (N > (IBI/5)*4) ){
       Pulse = true;                               // set the Pulse flag when we think there is a pulse
       digitalWrite(blinkPin,HIGH);                // turn on pin 13 LED
       IBI = sampleCounter - lastBeatTime;         // measure time between beats in mS
@@ -77,7 +77,6 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
         runningTotal += rate[i];              // add up the 9 oldest IBI values
       }
 
-      if(IBI < 100) IBI = 100;
       rate[9] = IBI;                          // add the latest IBI to the rate array
       runningTotal += rate[9];                // add the latest IBI to runningTotal
       runningTotal /= 10;                     // average the last 10 IBI values
@@ -113,7 +112,6 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
     for(int i = 0; i < 8; i++) {
       rate[i] = 600;
     }
-    IBI = 600;
     digitalWrite(tooHighPin, LOW);
   }
 

@@ -28,13 +28,13 @@ void setup() {
   lcd.begin(20, 4);
 
   // These variables won't be used apart from now I think, so don't waste Arduino memory storing them
-  //byte heart[8] = {0b00000, 0b01010, 0b11111, 0b11111, 0b11111, 0b01110, 0b00100, 0b00000};
+  byte heart[8] = {0b00000, 0b01010, 0b11111, 0b11111, 0b11111, 0b01110, 0b00100, 0b00000};
   byte heart_vals[8][8] = {
-                  {0,0xa,0x1f,0x1f,0x1f,0xe,4,0},
                   {0,0xa,0x1f,0x1f,0x1f,0xe,4,0},
                   {0,0,0x1f,0x1f,0x1f,0xe,4,0},
                   {0,0,0,0x1f,0x1f,0xe,4,0},
                   {0,0,0,0,0x1f,0xe,4,0},
+                  {0,0,0,0,0,0xe,4,0},
                   {0,0,0,0,0,0xe,4,0},
                   {0,0,0,0,0,0,4,0},
                   {0,0,0,0,0,0,0,0},
@@ -54,6 +54,7 @@ void setup() {
   for(int i = 0; i < 8; i++)lcd.createChar(i, heart_vals[i]);
   //for(int i = 0; i < 7; i++)lcd.createChar(i+1, graph_vals[i]);
   lcd.clear();
+  lcd.noCursor();
 
   interruptSetup();
 }
@@ -72,7 +73,7 @@ void loop() {
     lcd.print(" ");
 
     if(BPM > 100) {
-      lcd.print("TOO HIGH");
+      lcd.print("TOO HIGH ");
     }else {
       digitalWrite(tooHighPin, LOW);
       lcd.print("         ");
@@ -100,8 +101,8 @@ void loop() {
     if(fade & 1) {// If the first beat of flip is set
       if(graph_cell > 0) graph_cell--;
     }
-    fade = (fade + 1) % 4;
-    //fade ^= 1;// XOR operator, flips fade between 0 and 1
+    //fade = (fade + 1) % 4;
+    fade ^= 1;// XOR operator, flips fade between 0 and 1
   }
 
   delay(20);
